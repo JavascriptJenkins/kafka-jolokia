@@ -15,6 +15,31 @@
 
 FROM confluentinc/cp-base
 
+####################################################################
+####################################################################
+####################################################################
+####################################################################
+ENV USER_NAME=kafka \
+    USER_UID=1001
+
+
+RUN chmod g=u /opt &&\
+cd /opt &&\
+wget http://search.maven.org/remotecontent?filepath=org/jolokia/jolokia-jvm/1.5.0/jolokia-jvm-1.5.0-agent.jar -O jolokia.jar
+
+##ENV JOLOKIA_HOME=/opt
+##ENV JOLOKIA_JAR=/opt/jolokia-jvm-1.5.0-agent.jar
+ENV KAFKA_OPTS="-javaagent:/opt/jolokia.jar"=port=7778,host=*
+
+
+
+
+####################################################################
+####################################################################
+####################################################################
+####################################################################
+### Kafka gets installed at /etc/kafka on the image
+####################################################################
 ARG COMMIT_ID=unknown
 LABEL io.confluent.docker.git.id=$COMMIT_ID
 ARG BUILD_NUMBER=-1
@@ -48,5 +73,8 @@ RUN echo "===> installing ${COMPONENT}..." \
 VOLUME ["/var/lib/${COMPONENT}/data", "/etc/${COMPONENT}/secrets"]
 
 COPY include/etc/confluent/docker /etc/confluent/docker
+
+## CHANGED TO USER 1001
+USER 1001
 
 CMD ["/etc/confluent/docker/run"]
