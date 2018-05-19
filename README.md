@@ -4,7 +4,7 @@
 
 <b>How to get into a docker container:</b><br>
 
-    `docker exe -it 4f7453a4d1c  bash`
+    `docker exec -it 4f7453a4d1c  bash`
 
 
 <b>Run Docker zookeeper image:</b><br>
