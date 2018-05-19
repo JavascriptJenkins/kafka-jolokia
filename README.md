@@ -67,6 +67,26 @@ the number of days before the data expires.
 
 
 
+create topic (run these commands on kafka broker in container shell):
+
+kafka-topics --create --topic peter --partitions 1 --replication-factor 1 --if-not-exists --zookeeper 172.17.0.3:2181
+
+kafka-topics --describe --topic peter --zookeeper 172.17.0.3:2181
+
+bash -c "seq 42 | kafka-console-producer --request-required-acks 1 --broker-list localhost:9092 --topic peter && echo 'Produced 42 messages.'"
+
+
+kafka-console-consumer --bootstrap-server localhost:9092 --topic peter --from-beginning --max-messages 42
+
+
+kafka-topics --zookeeper 172.17.0.3:2181 --list
+
+kafka-topics --zookeeper 172.17.0.3:2181 --delete --topic peter
+
+---- actual commands, not confluents version
+./bin/kafka-topics.sh --zookeeper localhost:2181 --list
+
+./bin/kafka-topics.sh --zookeeper localhost:2181 --delete --topic remove-me
 
 
 
